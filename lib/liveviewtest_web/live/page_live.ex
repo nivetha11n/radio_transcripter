@@ -3,11 +3,11 @@ defmodule LiveviewtestWeb.PageLive do
   use LiveviewtestWeb, :live_view
 
 
-  @time_update_message :update_time
+  #@time_update_message :update_time
 
   def mount(_params, _session, socket) do
     if connected?(socket) do
-      :timer.send_interval(1000, @time_update_message)
+      LiveviewtestWeb.Endpoint.subscribe("time_updates")
     end
 
     {:ok, assign(socket, time: DateTime.utc_now())}
@@ -19,8 +19,10 @@ defmodule LiveviewtestWeb.PageLive do
     """
   end
 
-  def handle_info(@time_update_message, socket) do
-    {:noreply, assign(socket, time: DateTime.utc_now())}
+  def handle_info(%Phoenix.Socket.Broadcast{topic: "time_updates", event: "new_time", payload: time}, socket) do
+    {:noreply, assign(socket, time: time)}
   end
+
+
 
 end
