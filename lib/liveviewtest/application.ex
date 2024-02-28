@@ -16,7 +16,7 @@ defmodule Liveviewtest.Application do
       # Start a worker by calling: Liveviewtest.Worker.start_link(arg)
       # {Liveviewtest.Worker, arg},
       # Start to serve requests, typically the last entry
-      LiveviewtestWeb.TimeServer,
+      {Liveviewtest.TimeServer, []},
       LiveviewtestWeb.Endpoint
     ]
 

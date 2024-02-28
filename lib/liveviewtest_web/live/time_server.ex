@@ -14,7 +14,9 @@ defmodule Liveviewtest.TimeServer do
 
   # Handling the :tick message
   def handle_info(:tick, state) do
-    LiveviewtestWeb.Endpoint.broadcast("time_updates", "new_time", DateTime.utc_now())
+    LiveviewtestWeb.Endpoint.broadcast("time_updates", "new_time", DateTime.utc_now() |> DateTime.to_string())
+
+
     Process.send_after(self(), :tick, 1000) # Send :tick every 1000ms
     {:noreply, state}
   end

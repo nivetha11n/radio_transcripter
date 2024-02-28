@@ -5,6 +5,7 @@ defmodule LiveviewtestWeb.PageLive do
 
   #@time_update_message :update_time
 
+  @spec mount(any(), any(), Phoenix.LiveView.Socket.t()) :: {:ok, any()}
   def mount(_params, _session, socket) do
     if connected?(socket) do
       LiveviewtestWeb.Endpoint.subscribe("time_updates")
@@ -15,11 +16,12 @@ defmodule LiveviewtestWeb.PageLive do
 
   def render(assigns) do
     ~H"""
-     <%= DateTime.to_string(@time) %>
+    <%= @time %>
     """
   end
 
-  def handle_info(%Phoenix.Socket.Broadcast{topic: "time_updates", event: "new_time", payload: time}, socket) do
+  def handle_info(%Phoenix.Socket.Broadcast{event: "new_time", payload: time}, socket) do
+    # Update the socket's assigns with the new time
     {:noreply, assign(socket, time: time)}
   end
 
