@@ -2,7 +2,6 @@ defmodule LiveviewtestWeb.PageLive do
 
   use LiveviewtestWeb, :live_view
 
-  import DateTime
 
   @time_update_message :update_time
 
