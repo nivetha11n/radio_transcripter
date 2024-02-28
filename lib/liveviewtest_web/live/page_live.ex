@@ -2,19 +2,26 @@ defmodule LiveviewtestWeb.PageLive do
 
   use LiveviewtestWeb, :live_view
 
+  import DateTime
+
+  @time_update_message :update_time
+
   def mount(_params, _session, socket) do
-    {:ok, assign(socket, number: 5)}
+    if connected?(socket) do
+      :timer.send_interval(1000, @time_update_message)
+    end
+
+    {:ok, assign(socket, time: DateTime.utc_now())}
   end
 
   def render(assigns) do
     ~H"""
-    <%= @number %>
-    <.button phx-click="add">Add</.button>
+     <%= DateTime.to_string(@time) %>
     """
   end
 
-  def handle_event("add", _params, socket) do
-    {:noreply, assign(socket, number: socket.assigns.number + 1 )}
+  def handle_info(@time_update_message, socket) do
+    {:noreply, assign(socket, time: DateTime.utc_now())}
   end
 
 end
